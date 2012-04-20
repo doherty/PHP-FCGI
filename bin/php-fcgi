@@ -18,19 +18,17 @@ __END__
 
 =cut
 
-$ENV{USER} = 'www-data';
-$ENV{PATH} = '/usr/bin';
 $ENV{PHP_FCGI_CHILDREN} = 10;
 $ENV{PHP_FCGI_MAX_REQUESTS} = 1000;
 
 Daemon::Control->new({
     name        => 'php-fcgi',
     program     => '/usr/bin/php-cgi',
-    program_args=> [-b => '/tmp/php-cgi.sock'],
+    program_args=> [-b => '/tmp/php-fcgi.sock'],
     fork        => 2,
-    uid         => scalar getpwnam('www-data'),
-    gid         => scalar getgrnam('www-data'),
-    pid_file    => '/var/run/php-fcgi.pid',
+    user        => 'www-data',
+    group       => 'www-data',
+    pid_file    => '/tmp/php-fcgi.pid',
     stdout_file => '/var/log/php-fcgi.log',
     stderr_file => '/var/log/php-fcgi.log',
 
