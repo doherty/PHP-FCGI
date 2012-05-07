@@ -7,6 +7,7 @@ use warnings;
 # ABSTRACT: runs php under FCGI
 
 use Daemon::Control;
+use File::Spec;
 
 =head1 SYNOPSIS
 
@@ -20,17 +21,20 @@ __END__
 
 $ENV{PHP_FCGI_CHILDREN} = 10;
 $ENV{PHP_FCGI_MAX_REQUESTS} = 1000;
+my $run_dir = File::Spec->catdir(qw( / var run www-data-daemons));
 
 Daemon::Control->new({
     name        => 'php-fcgi',
     program     => '/usr/bin/php-cgi',
-    program_args=> [-b => '/tmp/php-fcgi.sock'],
+    program_args=> [-b => File::Spec->catfile($run_dir, 'php-fcgi.sock' )],
     fork        => 2,
     user        => 'www-data',
     group       => 'www-data',
-    pid_file    => '/tmp/php-fcgi.pid',
+    run_dir     => $run_dir,
+    pid_file    => 'php-fcgi.pid', # will be relative to run_dir
     stdout_file => '/var/log/php-fcgi.log',
     stderr_file => '/var/log/php-fcgi.log',
+    scan_name   => qr/php-cgi/,
 
     lsb_start   => '$nginx',
     lsb_stop    => '$nginx',
