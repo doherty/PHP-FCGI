@@ -24,7 +24,7 @@ unless (-d $dir) {
     chown scalar getpwnam('www-data'), scalar getgrnam('www-data'), $dir;
 }
 
-$ENV{PHP_FCGI_CHILDREN} = 10;
+$ENV{PHP_FCGI_CHILDREN} = 5;
 $ENV{PHP_FCGI_MAX_REQUESTS} = 1000;
 my $run_dir = File::Spec->catdir(qw( / var run www-data-daemons));
 
