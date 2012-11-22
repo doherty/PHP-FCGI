@@ -18,28 +18,26 @@ __END__
 
 =cut
 
-my $dir = File::Spec->catdir( File::Spec->rootdir, qw{var run www-data-daemons} );
-unless (-d $dir) {
-    mkdir $dir;
-    chown scalar getpwnam('www-data'), scalar getgrnam('www-data'), $dir;
+my $run_dir = File::Spec->catdir( File::Spec->rootdir, qw{var run www-data-daemons} );
+unless ( -d $run_dir ) {
+    mkdir $run_dir;
+    chown scalar getpwnam('www-data'), scalar getgrnam('www-data'), $run_dir;
 }
 
 $ENV{PHP_FCGI_CHILDREN} = 5;
 $ENV{PHP_FCGI_MAX_REQUESTS} = 1000;
-my $run_dir = File::Spec->catdir(qw( / var run www-data-daemons));
 
 Daemon::Control->new({
     name        => 'php-fcgi',
-    program     => '/usr/bin/php-cgi',
-    program_args=> [-b => File::Spec->catfile($run_dir, 'php-fcgi.sock' )],
+    program     => File::Spec->catfile( File::Spec->rootdir, qw{usr bin php-cgi} ),
+    program_args=> [ -b => File::Spec->catfile( $run_dir, 'php-fcgi.sock' ) ],
     fork        => 2,
     user        => 'www-data',
     group       => 'www-data',
-    run_dir     => $run_dir,
-    pid_file    => 'php-fcgi.pid', # will be relative to run_dir
-    stdout_file => '/var/log/php-fcgi.log',
-    stderr_file => '/var/log/php-fcgi.log',
-    scan_name   => qr/php-cgi/,
+    pid_file    => File::Spec->catfile( $run_dir, 'php-fcgi.pid' ),
+    stdout_file => File::Spec->catfile( $run_dir, 'php-fcgi.log' ),
+    stderr_file => File::Spec->catfile( $run_dir, 'php-fcgi.log' ),
+    scan_name   => qr{ php-fcgi }x,
 
     lsb_start   => '$nginx',
     lsb_stop    => '$nginx',
