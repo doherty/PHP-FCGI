@@ -13,7 +13,6 @@ my %module_build_args = (
     "Test::More" => 0
   },
   "configure_requires" => {
-    "ExtUtils::MakeMaker" => "6.30",
     "Module::Build" => "0.3601"
   },
   "dist_abstract" => "runs php under FCGI",
@@ -28,6 +27,7 @@ my %module_build_args = (
   "recursive_test_files" => 1,
   "requires" => {
     "Daemon::Control" => 0,
+    "File::Spec" => "v0.0.7",
     "perl" => "5.006",
     "strict" => 0,
     "warnings" => 0

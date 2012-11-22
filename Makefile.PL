@@ -18,7 +18,6 @@ my %WriteMakefileArgs = (
     "Test::More" => 0
   },
   "CONFIGURE_REQUIRES" => {
-    "ExtUtils::MakeMaker" => "6.30",
     "Module::Build" => "0.3601"
   },
   "DISTNAME" => "php-fcgi",
@@ -29,6 +28,7 @@ my %WriteMakefileArgs = (
   "NAME" => "php::fcgi",
   "PREREQ_PM" => {
     "Daemon::Control" => 0,
+    "File::Spec" => "v0.0.7",
     "strict" => 0,
     "warnings" => 0
   },
