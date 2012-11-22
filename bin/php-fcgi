@@ -19,6 +19,12 @@ __END__
 
 =cut
 
+my $dir = File::Spec->catdir( File::Spec->rootdir, qw{var run www-data-daemons} );
+unless (-d $dir) {
+    mkdir $dir;
+    chown scalar getpwnam('www-data'), scalar getgrnam('www-data'), $dir;
+}
+
 $ENV{PHP_FCGI_CHILDREN} = 10;
 $ENV{PHP_FCGI_MAX_REQUESTS} = 1000;
 my $run_dir = File::Spec->catdir(qw( / var run www-data-daemons));
